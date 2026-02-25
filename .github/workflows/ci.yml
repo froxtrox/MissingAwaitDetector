@@ -1,0 +1,93 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # SourceLink needs full git history
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+
+      - name: Restore
+        run: |
+          dotnet restore src/MissingAwaitDetector.Analyzers/MissingAwaitDetector.Analyzers.csproj
+          dotnet restore src/MissingAwaitDetector.Analyzers.Abstractions/MissingAwaitDetector.Analyzers.Abstractions.csproj
+          dotnet restore tests/MissingAwaitDetector.Analyzers.Tests/MissingAwaitDetector.Analyzers.Tests.csproj
+
+      - name: Build
+        run: |
+          dotnet build src/MissingAwaitDetector.Analyzers.Abstractions/MissingAwaitDetector.Analyzers.Abstractions.csproj --no-restore -c Release
+          dotnet build src/MissingAwaitDetector.Analyzers/MissingAwaitDetector.Analyzers.csproj --no-restore -c Release
+          dotnet build tests/MissingAwaitDetector.Analyzers.Tests/MissingAwaitDetector.Analyzers.Tests.csproj --no-restore -c Release
+
+      - name: Test
+        run: dotnet test tests/MissingAwaitDetector.Analyzers.Tests/MissingAwaitDetector.Analyzers.Tests.csproj --no-build -c Release --logger trx --collect:"XPlat Code Coverage" --results-directory ./TestResults
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: ./TestResults
+
+      - name: Pack
+        run: |
+          dotnet pack src/MissingAwaitDetector.Analyzers/MissingAwaitDetector.Analyzers.csproj -c Release -o ./artifacts --no-build
+          dotnet pack src/MissingAwaitDetector.Analyzers.Abstractions/MissingAwaitDetector.Analyzers.Abstractions.csproj -c Release -o ./artifacts --no-build
+
+      - name: Upload NuGet packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages
+          path: |
+            ./artifacts/*.nupkg
+            ./artifacts/*.snupkg
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build and Pack
+        run: |
+          dotnet restore src/MissingAwaitDetector.Analyzers/MissingAwaitDetector.Analyzers.csproj
+          dotnet restore src/MissingAwaitDetector.Analyzers.Abstractions/MissingAwaitDetector.Analyzers.Abstractions.csproj
+          dotnet build src/MissingAwaitDetector.Analyzers.Abstractions/MissingAwaitDetector.Analyzers.Abstractions.csproj -c Release
+          dotnet build src/MissingAwaitDetector.Analyzers/MissingAwaitDetector.Analyzers.csproj -c Release
+          dotnet pack src/MissingAwaitDetector.Analyzers/MissingAwaitDetector.Analyzers.csproj -c Release -o ./artifacts --no-build
+          dotnet pack src/MissingAwaitDetector.Analyzers.Abstractions/MissingAwaitDetector.Analyzers.Abstractions.csproj -c Release -o ./artifacts --no-build
+
+      - name: Publish to NuGet
+        run: dotnet nuget push ./artifacts/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ./artifacts/*.nupkg
+            ./artifacts/*.snupkg
+          generate_release_notes: true

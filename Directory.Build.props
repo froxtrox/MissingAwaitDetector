@@ -1,0 +1,40 @@
+<Project>
+
+  <PropertyGroup>
+    <!-- Shared version — bump here, both packages update -->
+    <Version>1.0.1</Version>
+
+    <!-- Package metadata -->
+    <Copyright>Copyright (c) 2026 froxtrox</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/froxtrox/MissingAwaitDetector</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/froxtrox/MissingAwaitDetector</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIcon>icon.png</PackageIcon>
+
+    <!-- Deterministic + reproducible builds -->
+    <Deterministic>true</Deterministic>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+    <!-- SourceLink: embeds repo + commit info into symbols -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+  </PropertyGroup>
+
+  <!-- CI-only: ensures bit-for-bit reproducible builds -->
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <!-- SourceLink -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <!-- Package icon (only for packable projects) -->
+  <ItemGroup Condition="'$(IsPackable)' != 'false'">
+    <None Include="$(MSBuildThisFileDirectory)assets\analyzers_logo_128x128.png" Pack="true" PackagePath="\icon.png" Link="icon.png" Visible="false" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,65 @@
+# MissingAwaitDetector.Analyzers configuration
+# Copy relevant sections to your project's .editorconfig
+
+[*.cs]
+
+# === STRICT MODE (recommended for new projects) ===
+
+# MAWT001: Task treated as value (ToString, interpolation, wrong parameter type)
+dotnet_diagnostic.MAWT001.severity = error
+
+# MAWT002: Synchronous unwrap (.Result, .Wait(), .GetAwaiter().GetResult())
+dotnet_diagnostic.MAWT002.severity = error
+
+# MAWT003: Task state inspection (.Status, .IsCompleted, .IsFaulted, .Id, etc.)
+dotnet_diagnostic.MAWT003.severity = warning
+# Opt out specific Task properties (comma-separated, case-sensitive). Useful for diagnostic helpers.
+# dotnet_diagnostic.MAWT003.excluded_task_properties = Id, CurrentId, AsyncState, CreationOptions
+
+# MAWT004: Fire-and-forget (Task result discarded)
+dotnet_diagnostic.MAWT004.severity = error
+
+# MAWT005: Task stored but never awaited or composed
+dotnet_diagnostic.MAWT005.severity = error
+
+# MAWT006: ValueTask misuse (multiple await, delayed await)
+dotnet_diagnostic.MAWT006.severity = error
+
+# MAWT007: LINQ produces unawaited Task collection
+dotnet_diagnostic.MAWT007.severity = warning
+
+# MAWT008: Synchronous unwrap inside async method
+dotnet_diagnostic.MAWT008.severity = error
+
+# MAWT009: Task inspected before return (code smell)
+dotnet_diagnostic.MAWT009.severity = suggestion
+
+# MAWT010: Async void method (event handlers are exempt)
+dotnet_diagnostic.MAWT010.severity = error
+
+# === LENIENT MODE (for migration) ===
+# Uncomment below to use lenient mode:
+
+# dotnet_diagnostic.MAWT001.severity = warning
+# dotnet_diagnostic.MAWT002.severity = warning
+# dotnet_diagnostic.MAWT003.severity = suggestion
+# dotnet_diagnostic.MAWT004.severity = warning
+# dotnet_diagnostic.MAWT005.severity = warning
+# dotnet_diagnostic.MAWT006.severity = warning
+# dotnet_diagnostic.MAWT007.severity = suggestion
+# dotnet_diagnostic.MAWT008.severity = warning
+# dotnet_diagnostic.MAWT009.severity = none
+# dotnet_diagnostic.MAWT010.severity = warning
+
+# === SUPPRESS FOR LEGACY CODE ===
+# [**/Legacy/**/*.cs]
+# dotnet_diagnostic.MAWT001.severity = none
+# dotnet_diagnostic.MAWT002.severity = none
+# dotnet_diagnostic.MAWT003.severity = none
+# dotnet_diagnostic.MAWT004.severity = none
+# dotnet_diagnostic.MAWT005.severity = none
+# dotnet_diagnostic.MAWT006.severity = none
+# dotnet_diagnostic.MAWT007.severity = none
+# dotnet_diagnostic.MAWT008.severity = none
+# dotnet_diagnostic.MAWT009.severity = none
+# dotnet_diagnostic.MAWT010.severity = none

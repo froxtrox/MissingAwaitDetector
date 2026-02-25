@@ -1,0 +1,55 @@
+## .NET / Visual Studio
+.vs/
+*.user
+*.suo
+*.cache
+*.userosscache
+*.sln.docstates
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+
+# Build results
+artifacts/
+publish/
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Coverage
+*.coverage
+*.coveragexml
+coverage/
+TestResults/
+
+# Claude Code
+.claude/
+
+# IDE
+.idea/
+*.sln.iml
+.vscode/
+_ReSharper*/
+*.DotSettings.user
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+*~

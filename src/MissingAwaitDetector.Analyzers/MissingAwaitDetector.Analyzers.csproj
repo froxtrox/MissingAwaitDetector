@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+
+    <!-- Package metadata -->
+    <PackageId>MissingAwaitDetector.Analyzers</PackageId>
+    <Title>Async/Await Analyzer for C#</Title>
+    <Description>Tasks are not values - MissingAwaitDetector ensures you treat them correctly.</Description>
+    <Authors>froxtrox</Authors>
+    <PackageTags>analyzer;async;await;task;roslyn;csharp;valuetask</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>CS1591</NoWarn>
+
+    <!-- Analyzer packaging -->
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.12.0" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" Link="README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MissingAwaitDetector.Analyzers.Abstractions\MissingAwaitDetector.Analyzers.Abstractions.csproj" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

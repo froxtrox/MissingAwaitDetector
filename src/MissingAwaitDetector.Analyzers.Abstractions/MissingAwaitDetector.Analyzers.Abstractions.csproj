@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+
+    <!-- Package metadata -->
+    <PackageId>MissingAwaitDetector.Analyzers.Abstractions</PackageId>
+    <Title>MissingAwaitDetector Analyzers Abstractions</Title>
+    <Description>Attributes for controlling MissingAwaitDetector analyzer behavior: [FireAndForget], [AllowSynchronousIO].</Description>
+    <Authors>froxtrox</Authors>
+    <PackageTags>async;await;task;attributes</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

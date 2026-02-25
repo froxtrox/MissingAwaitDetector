@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net472;net48;net6.0;net7.0;net8.0;net9.0;net10.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <!-- MAWT00x suppressed at build time; IDE squiggles still appear -->
+    <!-- NETSDK1138: EoL notices for net6/7 — intentionally included -->
+    <NoWarn>NETSDK1138;MAWT001;MAWT002;MAWT003;MAWT004;MAWT005;MAWT006;MAWT007;MAWT008;MAWT009;MAWT010</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- ValueTask<T> not built into .NET Framework -->
+    <PackageReference Condition="'$(TargetFramework)' == 'net472' Or '$(TargetFramework)' == 'net48'" Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Attach analyzer: squiggles appear in IDE, no runtime assembly linkage -->
+    <ProjectReference Include="..\..\src\MissingAwaitDetector.Analyzers\MissingAwaitDetector.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <!-- Abstractions: provides [FireAndForget] and [AllowSynchronousIO] -->
+    <ProjectReference Include="..\..\src\MissingAwaitDetector.Analyzers.Abstractions\MissingAwaitDetector.Analyzers.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
