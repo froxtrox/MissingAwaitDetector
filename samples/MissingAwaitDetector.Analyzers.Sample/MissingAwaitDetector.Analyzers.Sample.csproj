@@ -9,7 +9,7 @@
     <IsPackable>false</IsPackable>
     <!-- MAWT00x suppressed at build time; IDE squiggles still appear -->
     <!-- NETSDK1138: EoL notices for net6/7 — intentionally included -->
-    <NoWarn>NETSDK1138;MAWT001;MAWT002;MAWT003;MAWT004;MAWT005;MAWT006;MAWT007;MAWT008;MAWT009;MAWT010</NoWarn>
+    <!--<NoWarn>NETSDK1138;MAWT001;MAWT002;MAWT003;MAWT004;MAWT005;MAWT006;MAWT007;MAWT008;MAWT009;MAWT010</NoWarn>-->
   </PropertyGroup>
 
   <ItemGroup>

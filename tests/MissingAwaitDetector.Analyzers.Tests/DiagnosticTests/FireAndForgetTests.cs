@@ -584,5 +584,30 @@ class C
 
             await CSharpAnalyzerVerifier<FireAndForgetAnalyzer>.VerifyAnalyzerAsync(source, expected);
         }
+
+        [Fact]
+        public async Task ContinueWithResultDiscarded_Reports_MAWT004()
+        {
+            var source = @"
+using System;
+using System.Threading.Tasks;
+
+class C
+{
+    Task<int> GetNumberAsync() => Task.FromResult(3);
+
+    void M()
+    {
+        {|#0:GetNumberAsync().ContinueWith(t => Console.WriteLine(t.Result))|};
+    }
+}";
+
+            var expected = CSharpAnalyzerVerifier<FireAndForgetAnalyzer>
+                .Diagnostic(DiagnosticIds.FireAndForget)
+                .WithLocation(0)
+                .WithArguments("ContinueWith");
+
+            await CSharpAnalyzerVerifier<FireAndForgetAnalyzer>.VerifyAnalyzerAsync(source, expected);
+        }
     }
 }

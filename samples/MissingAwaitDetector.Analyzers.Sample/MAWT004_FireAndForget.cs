@@ -35,6 +35,11 @@ public static class MAWT004_FireAndForget
         svc?.ProcessAsync();
     }
 
+    public static void BadExample_ContinueWith()
+    {
+        GetNumberAsync().ContinueWith(t => Console.WriteLine(t.Result));
+    }
+
     // ── GOOD EXAMPLES — no squiggles ───────────────────────────────────────
 
     public static async Task GoodExamplesAsync()
